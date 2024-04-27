@@ -16,6 +16,8 @@ import java.sql.ResultSet;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -114,10 +116,17 @@ public class Aplicacion {
                     } catch (SQLException ex) {
                         System.err.printf("Se ha producio un error al ejecutar la consulta SQL.");
                     }
-                    //crearProducto(con, "barcode", "ProductoX", 50.4256879);
-                    //crearTicketFechaActual(con);
+                    crearProducto(con, "barcode", "ProductoX", 50.4256879);
+                    crearTicketFechaActual(con);
                     //obtenerTodosLosProductos(con);
-                    obtenerTodosLosTickets(con);
+                    //obtenerTodosLosTickets(con);
+                    //obtenerProductosPorPrecio(con, 15);
+                    //actualizarNombreProducto(con,"Producto33",1);
+                    List<Long> listadoAeliminar = new ArrayList<>();
+                    listadoAeliminar.add(1L);
+                    listadoAeliminar.add(5L);
+                    listadoAeliminar.add(6L);
+                    //eliminarProducto(con, listadoAeliminar);
                     bloquearHastaPulsarTecla();
 
                 } else {
@@ -268,26 +277,112 @@ public class Aplicacion {
         }
     }
 
-   public static void obtenerTodosLosTickets(Connection con){
-       String query = "SELECT id,fecha,hora,ticketcerrado FROM ticket";
-       
-       if(con != null){
-           try(PreparedStatement consulta = con.prepareStatement(query)){
-               ResultSet  resultados = consulta.executeQuery();
-               while(resultados.next()){
-                   System.out.printf("Ticket con ID:%s FECHA:%s HORA:%s ESTADO:%b %n",
-                           resultados.getLong("id"),
-                           resultados.getDate("fecha"),
-                           resultados.getTime("hora"),
-                           resultados.getBoolean("ticketcerrado"));
-               }
-           
-           }catch(SQLException ex){
-               System.out.println("Ha ocurrido un problema al obtener todos los tickets"+ex.getMessage());
-           }
-       }
-   }
-    
-    
-    
+    public static void obtenerTodosLosTickets(Connection con) {
+        String query = "SELECT id,fecha,hora,ticketcerrado FROM ticket";
+
+        if (con != null) {
+            try (PreparedStatement consulta = con.prepareStatement(query)) {
+                ResultSet resultados = consulta.executeQuery();
+                while (resultados.next()) {
+                    System.out.printf("Ticket con ID:%s FECHA:%s HORA:%s ESTADO:%b %n",
+                            resultados.getLong("id"),
+                            resultados.getDate("fecha"),
+                            resultados.getTime("hora"),
+                            resultados.getBoolean("ticketcerrado"));
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("Ha ocurrido un problema al obtener todos los tickets" + ex.getMessage());
+            }
+        }
+    }
+
+    public static void obtenerProductosPorPrecio(Connection con, double precio) {
+        String queryPrecioInferior = "SELECT id,barcode,nombre,precio FROM producto WHERE precio < ?";
+        String queryPrecioMayor = "SELECT id,barcode,nombre,precio FROM producto WHERE precio > ?";
+
+        if (con != null) {
+            try (PreparedStatement consulta = con.prepareStatement(queryPrecioInferior)) {
+                consulta.setDouble(1, precio);
+                boolean aceptado = consulta.execute();
+                if (aceptado) {
+                    System.out.println("MOSTRAR LOS PRODUCTOS CON PRECIO INFERIOR A " + precio + " €");
+                    ResultSet resultados = consulta.executeQuery();
+                    while (resultados.next()) {
+                        System.out.printf("ID %s BARCODE %s NOMBRE %s PRECIO %.2f %n",
+                                resultados.getLong("id"),
+                                resultados.getString("barcode"),
+                                resultados.getString("nombre"),
+                                resultados.getDouble("precio")
+                        );
+                    }
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("Ha ocurrido un error al tratar de obtener los productos inferiores al precio solicitado");
+            }
+
+            try (PreparedStatement consulta = con.prepareStatement(queryPrecioMayor)) {
+                consulta.setDouble(1, precio);
+                boolean aceptado = consulta.execute();
+                ResultSet resultados = consulta.executeQuery();
+                if (aceptado) {
+                    System.out.println("MOSTRAR LOS PRODUCTOS CON PRECIO MAYOR A " + precio + "€");
+                    while (resultados.next()) {
+                        System.out.printf("ID %s BARCODE %s NOMBRE %s PRECIO %.2f %n",
+                                resultados.getLong("id"),
+                                resultados.getString("barcode"),
+                                resultados.getString("nombre"),
+                                resultados.getDouble("precio")
+                        );
+                    }
+                }
+            } catch (SQLException ex) {
+                System.out.println("Ha ocurrido un error al tratar de obtener los productos mayores al precio solicitado");
+            }
+        }
+
+    }
+
+    public static void actualizarNombreProducto(Connection con, String nombre, long id) {
+        String query = "UPDATE producto SET nombre = ? WHERE id = ?";
+        if (con != null) {
+            try (PreparedStatement consulta = con.prepareStatement(query)) {
+                consulta.setString(1, nombre);
+                consulta.setLong(2, id);
+
+                int resultado = consulta.executeUpdate();
+                if (resultado > 0) {
+                    System.out.println("Actualización exitosa");
+                } else {
+                    System.out.println("Error en la actualización del dato solicitado");
+                }
+
+            } catch (SQLException ex) {
+                System.out.println("Error al actualizar el producto solicitado");
+            }
+
+        }
+    }
+
+    public static void eliminarProducto(Connection con, List<Long> listadoAeliminar) {
+        String query = "DELETE FROM producto WHERE id = ?";
+        if (con != null) {
+            for (long id : listadoAeliminar) {
+                try (PreparedStatement consulta = con.prepareStatement(query)) {
+                    consulta.setLong(1, id);
+                    int resultado = consulta.executeUpdate();
+                    if (resultado > 0) {
+                        System.out.printf("Producto con ID %d eliminado con éxito %n",id);
+                    } else {
+                        System.out.println("El producto solicitado no ha podido ser eliminado");
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("Ha ocurrido un problema al tratar de eliminar un producto");
+                }
+            }
+        }
+
+    }
+
 }
