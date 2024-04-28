@@ -1,0 +1,40 @@
+2024-04-27 21:21:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+SELECT 1 FROM PRODUCTO [42102-197]
+2024-04-27 21:21:11 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "SEQUENCE" no encontrada
+Table "SEQUENCE" not found; SQL statement:
+SELECT 1 FROM SEQUENCE [42102-197]
+2024-04-28 08:58:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+DROP TABLE PRODUCTO [42102-197]
+2024-04-28 08:58:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+DROP TABLE PRODUCTO [42102-197]
+2024-04-28 08:58:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+DROP TABLE PRODUCTO [42102-197]
+2024-04-28 08:58:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+DROP TABLE PRODUCTO [42102-197]
+2024-04-28 08:58:36 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+DROP TABLE PRODUCTO [42102-197]
+2024-04-28 09:04:13 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+SELECT 1 FROM PRODUCTO [42102-197]
+2024-04-28 09:14:39 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+SELECT 1 FROM PRODUCTO [42102-197]
+2024-04-28 09:14:53 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLException: Tabla "PRODUCTO" no encontrada
+Table "PRODUCTO" not found; SQL statement:
+SELECT 1 FROM PRODUCTO [42102-197]
